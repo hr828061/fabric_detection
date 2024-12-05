@@ -1,62 +1,24 @@
+import os
 from ultralytics import YOLO
-MODEL_DIR = 'https://github.com/hr828061/fabric_detection/blob/main/best.pt'
+import streamlit as st
+
+MODEL_DIR = "best.pt"  # Adjust path as necessary
 
 def main():
-    # Load the YOLO model
-    model = YOLO(MODEL_DIR)
+    if not os.path.exists(MODEL_DIR):
+        st.error(f"Model file not found at: {MODEL_DIR}")
+        return
 
-    st.sidebar.header("Fabric Defect Detection using YOLOv8\nMembers:\nk21-3010\n\n        DevOps Project")
-    st.title("Real-time Fabric Defect Detection")
-    st.write("""
-    This app allows you to upload a fabric image or use your webcam for real-time fabric defect detection using the YOLOv8 model.
-    """)
+    try:
+        model = YOLO(MODEL_DIR)
+        st.sidebar.write("Model loaded successfully!")
+    except Exception as e:
+        st.error(f"Failed to load model: {e}")
+        return
 
-    # Sidebar Options
-    option = st.sidebar.radio("Choose Input Method", ("Browse Image", "Real-time Video"))
+    # Rest of the Streamlit app logic
+    st.title("Fabric Defect Detection")
+    st.write("App is running!")
 
-    if option == "Browse Image":
-        uploaded_file = st.file_uploader("Upload a Fabric Image", type=['jpg', 'jpeg', 'png'])
-        if uploaded_file:
-            if uploaded_file.type.startswith('image'):
-                inference_images(uploaded_file, model)
-
-    elif option == "Real-time Video":
-        st.warning("Ensure your webcam is enabled!")
-        real_time_video(model)
-
-def inference_images(uploaded_file, model):
-    image = Image.open(uploaded_file)
-    # Perform inference on the uploaded image
-    predict = model.predict(image)
-    boxes = predict[0].boxes
-    plotted = predict[0].plot()[:, :, ::-1]
-
-    if len(boxes) == 0:
-        st.markdown("**No Detection**")
-
-    st.image(plotted, caption="Detected Image", width=600)
-
-def real_time_video(model):
-    # Start video capture
-    cap = cv2.VideoCapture(0)  # 0 for the default camera, adjust for external cameras
-
-    stframe = st.empty()  # Create a Streamlit container to hold video frames
-    st.button("Stop", key="stop_button")  # Placeholder for stopping (not implemented fully)
-
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            st.error("Failed to capture video frame.")
-            break
-
-        # Perform inference on the current frame
-        results = model.predict(frame)
-        plotted_frame = results[0].plot()
-
-        # Display the result in real-time
-        stframe.image(plotted_frame, channels="BGR", use_column_width=True)
-
-    cap.release()
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
