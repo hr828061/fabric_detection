@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 
-MODEL_DIR = 'C:/Users/huzai/OneDrive/Desktop/Sample1/Training/weights/best.pt'
+MODEL_DIR = 'https://github.com/hr828061/fabric_detection/blob/main/best.pt'
 
 def main():
     # Load the YOLO model
