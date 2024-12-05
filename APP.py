@@ -1,4 +1,6 @@
+pip install os
 import os
+pip install ultralytics
 from ultralytics import YOLO
 import streamlit as st
 
