@@ -1,8 +1,3 @@
-from PIL import Image
-import streamlit as st
-import cv2
-import numpy as np
-from ultralytics import YOLO
 
 MODEL_DIR = 'https://github.com/hr828061/fabric_detection/blob/main/best.pt'
 
