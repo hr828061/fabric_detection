@@ -1,4 +1,4 @@
-
+from ultralytics import YOLO
 MODEL_DIR = 'https://github.com/hr828061/fabric_detection/blob/main/best.pt'
 
 def main():
